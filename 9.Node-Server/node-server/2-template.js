@@ -9,7 +9,8 @@ const courses = [
     {name: "HTML"},
     {name: "CSS"},
     {name: "JS"},
-    {name: "node"},
+    {name: "Node"},
+    {name: "FrontEnd"},
 ];
 const server = http.createServer((req, res) => {
     console.log("incoming...");
