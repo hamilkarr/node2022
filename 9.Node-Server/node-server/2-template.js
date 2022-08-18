@@ -1,9 +1,16 @@
 const http = require('http');
 const fs = require('fs');
-
+const ejs = require('ejs');
 // console.log(http.STATUS_CODES);
 // console.log(http.METHODS);
 
+const name = 'Ellie';
+const courses = [
+    {name: "HTML"},
+    {name: "CSS"},
+    {name: "JS"},
+    {name: "node"},
+];
 const server = http.createServer((req, res) => {
     console.log("incoming...");
     // console.log(req.headers);;
@@ -14,18 +21,13 @@ const server = http.createServer((req, res) => {
     
     res.setHeader('Content-Type', 'text/html');
     if(url === '/'){
-        if(fs.existsSync('./html/index.html')) {
-            console.log("True");
-        }
-        const read = fs.createReadStream('./html/index.html');
-        read.pipe(res);
+        ejs
+            .renderFile('./template/index.ejs',{name})
+            .then(data => res.end(data));
     } else if(url === '/course'){        
-        fs.createReadStream('./html/courses.html').pipe(res);
-        // res.setHeader('Content-Type', 'text/html');
-        // res.write('<html>')
-        // res.write('<head><title>Hello</title></head>');
-        // res.write('<body><h1>Courses</h1></body>');
-        // res.write('</html>');
+        ejs
+            .renderFile('./template/courses.ejs',{courses})
+            .then(data => res.end(data));
     } else {
         const read = fs.createReadStream('./html/index.html');
         read.pipe(res);
