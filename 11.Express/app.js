@@ -1,43 +1,33 @@
 import express from 'express';
 import fs from 'fs';
 import fsAsync from 'fs/promises';
+import postRouter from './router/post.js';
+import userRouter from './router/user.js';
+import cors from 'cors';
 
 const app = express();
 
-app.use(express.json());
+app.use(cors({
+    origin: ['http://'],
+    optionsSuccessStatus: 200,
+    credentials: true, //Access-Control-Allow-Credentials 
+}));
 
-app.get('/file1', (req,res)=> {
-    try {
-        const data  = fs.readFileSync('./file.txt');
-    } catch(error) {
-        res.status(404).send("File not Found");
+app.use(express.json()); // REST API, Body parsing;
+app.use(express.urlencoded({ extended : false})); //HTML Form
+const option = {
+    dotfiles : 'ignore',
+    etag: false,
+    index: false,
+    maxAge: '1d',
+    redirect: false,
+    setHeaders: function (res, path, stat) {
+        res.set('x-timestamp', Date.now());
     }
+}
+app.use(express.static('public', option));
 
-    fs.readFile('/file1.txt',(err,data) => {
-        if(err) {
-            res.status(404).send("File not Found!");
-        } // 비동기적 흐름에서는 에러가 외부로 던져지지 않는다. 
-    });
-});
-
-app.get('/file2', (req,res,next)=> {
-    fsAsync
-        .readFile('file.txt')
-        .then((data)=>{})
-        .catch((error) => res.status(404).send("File not Found!"));
-});
-
-app.get('/file3', async (req,res) => {
-    try {
-        const data = await fsAsync.readFile('/file.txt');
-    } catch(error) {
-        res.status(404).send("File not Found!");
-    }
-})
-
-app.use((error,req,res,next) => {
-    console.error(error);
-    res.status(500).json({message: "Something wrong"});
-});
+app.use('/posts', postRouter);
+app.use('/users', userRouter);
 
 app.listen(8080);
