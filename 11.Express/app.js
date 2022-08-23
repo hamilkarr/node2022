@@ -16,7 +16,7 @@ app.get('/file1', (req,res)=> {
     fs.readFile('/file1.txt',(err,data) => {
         if(err) {
             res.status(404).send("File not Found!");
-        } // ºñµ¿±âÀû Èå¸§¿¡¼­´Â ¿¡·¯°¡ ¿ÜºÎ·Î ´øÁ®ÁöÁö ¾Ê´Â´Ù. 
+        } // ë¹„ë™ê¸°ì  íë¦„ì—ì„œëŠ” ì—ëŸ¬ê°€ ì™¸ë¶€ë¡œ ë˜ì ¸ì§€ì§€ ì•ŠëŠ”ë‹¤. 
     });
 });
 
