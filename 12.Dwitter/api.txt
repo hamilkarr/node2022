@@ -10,3 +10,45 @@
 트윗 삭제
 트윗 수정
 //
+Tweets
+{
+    id: string,// 트윗 아이디
+    text: string, // 트윗 텍스트
+    createdAt: Date, // 트윗 생성 날짜
+    name: string, // 사용자 이름    
+    username: string, // 사용자 닉네임 (아이디)
+    url: string // 사용자 프로파일 사진 URL
+}
+
+GET /Tweets
+    Response 200
+    {
+        [tweet,tweet ....]
+    }
+
+GET /tweets?username=:username
+
+GET /tweets/:id
+
+POST /tweets 
+{
+    text,
+    name,
+    username,
+    url, (optional)
+}
+
+PUT /tweets/:id
+Request
+{
+    text
+}
+
+Response 200
+{
+    tweet
+}
+
+DELETE /tweets/:id
+Response 204
+
