@@ -1,8 +1,16 @@
 export default class TweetService {
 
 
+  constructor(baseURL) {
+    this.baseURL = baseURL;
+  }
+
   async getTweets(username) {
-    const 
+    const query = username ? `?username=${username}` : '';
+    const response = await fetch(`${this.baseURL}/tweets${query}`, {
+      method: 'GET',
+      headers: {'Content-Type'}
+    })
   }
 
   async postTweet(text) {
