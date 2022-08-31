@@ -9,32 +9,48 @@ export default class TweetService {
     const query = username ? `?username=${username}` : '';
     const response = await fetch(`${this.baseURL}/tweets${query}`, {
       method: 'GET',
-      headers: {'Content-Type'}
-    })
+      headers: {'Content-Type': 'application/json'},
+    });
+    const data = await response.json();
+    if(response.status !== 200) {
+      throw new Error(data.message);      
+    }
+    return data;
   }
 
-  async postTweet(text) {
-    const tweet = {
-      id: Date.now(),
-      createdAt: new Date(),
-      name: 'Ellie',
-      username: 'ellie',
-      text,
-    };
-    this.tweets.push(tweet);
-    return tweet;
+  async postTweet(text) {    
+    const response = await fetch(`${this.baseURL}/tweets`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({text, username:'ellie', name: 'ellie'}),
+    });
+    const data = await response.json();
+    if(response.status !== 201) {
+      throw new Error(data.message);      
+    }
+    return data;
   }
 
-  async deleteTweet(tweetId) {
-    this.tweets = this.tweets.filter((tweet) => tweet.id !== tweetId);
+  async deleteTweet(tweetId) {    
+    const response = await fetch(`${this.baseURL}/tweets${tweetId}`, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+    });    
+    if(response.status !== 204) {
+      throw new Error();      
+    }    
   }
 
   async updateTweet(tweetId, text) {
-    const tweet = this.tweets.find((tweet) => tweet.id === tweetId);
-    if (!tweet) {
-      throw new Error('tweet not found!');
+    const response = await fetch(`${this.baseURL}/tweets/${tweetId}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({text}),
+    });
+    const data = await response.json();
+    if(response.status !== 201) {
+      throw new Error(data.message);      
     }
-    tweet.text = text;
-    return tweet;
+    return data;
   }
 }
